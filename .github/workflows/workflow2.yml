@@ -63,16 +63,10 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Step 7: Build and push Docker images for backend
-      - name: Build and push backend Docker image
-        working-directory: backend
+       - name: Build Docker images using docker-compose
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/backend:latest .
-          docker push ${{ secrets.DOCKER_USERNAME }}/backend:latest
+          docker compose build
 
-      # Step 8: Build and push Docker images for frontend
-      - name: Build and push frontend Docker image
-        working-directory: frontend
+      - name: Push Docker images to Docker Hub
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/frontend:latest .
-          docker push ${{ secrets.DOCKER_USERNAME }}/frontend:latest
+          docker compose push
