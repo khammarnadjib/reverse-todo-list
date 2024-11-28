@@ -7,7 +7,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-
+//URI MONGODB
 const mongoURI = process.env.MONGO_URL || "mongodb+srv://user:pass@cluster0.acc8r.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 mongoose.connect(mongoURI, {
     useNewUrlParser: true,
