@@ -42,7 +42,7 @@ jobs:
           npm install
           npm test
 
-      # Step 6: Automatically merge dev into main, preferring dev's changes
+      # Step  6: Automatically merge dev into main, preferring dev's changes
       - name: Merge dev into main
         if: success()
         run: |
