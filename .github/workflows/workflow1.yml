@@ -14,30 +14,36 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Build and run services using Docker Compose
+      # Step 2: Install Docker Compose
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose-plugin
+
+      # Step 3: Build and start Docker services
       - name: Build and start Docker services
         run: |
           docker-compose -f docker-compose.yml up --build -d
 
-      # Step 3: Wait for services to stabilize
+      # Step 4: Wait for services to stabilize
       - name: Wait for services to stabilize
         run: sleep 10
 
-      # Step 4: Run backend tests
+      # Step 5: Run backend tests
       - name: Run backend tests
         run: |
           docker exec backend npm test
 
-      # Step 5: Run frontend tests
+      # Step 6: Run frontend tests
       - name: Run frontend tests
         run: |
           docker exec frontend npm test
 
-      # Step 6: Tear down services
+      # Step 7: Tear down services
       - name: Tear down Docker services
         run: docker-compose down
 
-      # Step 7: Merge dev into main if tests are successful
+      # Step 8: Merge dev into main if tests are successful
       - name: Merge dev into main
         if: success()
         run: |
