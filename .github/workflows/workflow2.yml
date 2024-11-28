@@ -40,10 +40,11 @@ jobs:
       run: |
         npm install
         npm test
-
+    
     - name: Install e2e dependencies
-        working-directory: e2e-tests
-        run: npm install
+      working-directory: e2e-tests
+      run: 
+        npm install
 
     - name: Start Application with Docker Compose
       working-directory: ./
