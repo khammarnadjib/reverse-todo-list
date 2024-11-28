@@ -1,0 +1,48 @@
+name: CI for dev Branch
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Build and run services using Docker Compose
+      - name: Build and start Docker services
+        run: |
+          docker-compose -f docker-compose.yml up --build -d
+
+      # Step 3: Wait for services to stabilize
+      - name: Wait for services to stabilize
+        run: sleep 10
+
+      # Step 4: Run backend tests
+      - name: Run backend tests
+        run: |
+          docker exec backend npm test
+
+      # Step 5: Run frontend tests
+      - name: Run frontend tests
+        run: |
+          docker exec frontend npm test
+
+      # Step 6: Tear down services
+      - name: Tear down Docker services
+        run: docker-compose down
+
+      # Step 7: Merge dev into main if tests are successful
+      - name: Merge dev into main
+        if: success()
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git checkout main
+          git merge dev
+          git push origin main
