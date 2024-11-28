@@ -16,36 +16,33 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Install Docker Compose
-      - name: Set up Docker Compose
+      # Step 2: Set up Node.js for backend
+      - name: Set up Node.js (backend)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # Step 3: Install dependencies and run backend tests
+      - name: Install backend dependencies and run tests
+        working-directory: backend
         run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose-plugin
+          npm install
+          npm test
 
-      # Step 3: Build and start Docker services
-      - name: Build and start Docker services
+      # Step 4: Set up Node.js for frontend
+      - name: Set up Node.js (frontend)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # Step 5: Install dependencies and run frontend tests
+      - name: Install frontend dependencies and run tests
+        working-directory: frontend
         run: |
-          docker-compose -f docker-compose.yml up --build -d
+          npm install
+          npm test
 
-      # Step 4: Wait for services to stabilize
-      - name: Wait for services to stabilize
-        run: sleep 10
-
-      # Step 5: Run backend tests
-      - name: Run backend tests
-        run: |
-          docker exec backend npm test
-
-      # Step 6: Run frontend tests
-      - name: Run frontend tests
-        run: |
-          docker exec frontend npm test
-
-      # Step 7: Tear down services
-      - name: Tear down Docker services
-        run: docker-compose down
-
-      # Step 8: Merge dev into main if tests are successful
+      # Step 6: Merge dev into main if tests are successful
       - name: Merge dev into main
         if: success()
         run: |
