@@ -1,9 +1,11 @@
 name: CD for main Branch
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run :
+    workflows : ['CI for dev Branch']
+    types : 
+      - completed
+      
 
 jobs:
   build-test-and-deploy:
